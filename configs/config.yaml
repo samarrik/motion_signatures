@@ -1,5 +1,6 @@
 dataset_path: data/example_dataset
 
+# Pre-processing
 compression:
   required: True
   values: # crf values
@@ -15,3 +16,36 @@ scaling:
     - 0.6
     - 0.4
     - 0.2
+
+# Extraction
+extraction:
+  required: True
+  to_extract_dir: train
+  extracted_path: data/extracted
+  extractors:
+    py-feat:
+      - Pitch
+      - Roll
+      - Yaw
+      - AU01
+      - AU02
+      - AU04
+      - AU05
+      - AU06
+      - AU07
+      - AU09
+      - AU10
+      - AU11
+      - AU12
+      - AU14
+      - AU15
+      - AU17
+      - AU20
+      - AU23
+      - AU24
+      - AU25
+      - AU26
+      - AU28
+      - AU43
+
+# Correlations

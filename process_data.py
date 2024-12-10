@@ -56,9 +56,20 @@ if __name__ == "__main__":
         scale(dataset_path, scaling["values"])
 
     # Extract features
-    extract_features(dataset_path, config)
+    # ! As feature extraction is a highly expensive task computationally, it is performed
+    # ! on subdatasets, NOT the whole dataset at once
+    extraction = config.get("extraction")
+    if extraction["required"]:
+        to_extract_dir = extraction["to_extract_dir"]
+        extracted_path = extraction["extracted_path"]
+        extractors = extraction["extractors"]
+
+        subdataset_path = os.path.join(dataset_path, to_extract_dir)
+        extracted_subdataset_path = os.path.join(extracted_path, to_extract_dir)
+        extract_features(subdataset_path, extracted_subdataset_path, extractors)
 
     # Postprocess features
-    # compute_corrs(dataset_path, config)
+    # correlations_path = config.get("correlations_path")
+    # compute_corrs(extracted_path, correlations_path, config)
 
     ...
