@@ -1,5 +1,6 @@
 import os
 import subprocess
+from tqdm import tqdm
 
 def compress_video(origin, destination, value):
     ffmpeg_command = [
@@ -12,12 +13,14 @@ def compress_video(origin, destination, value):
     ]
     result = subprocess.run(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if result.returncode != 0:
+        print(f"FFprobe error:\n{result.stderr}")
         raise RuntimeError(f"Compression failed for {origin}.")
 
 
 def compress(path: str, values: list):
-    for value in values:
-        for subdataset in os.listdir(path):
+    subdatasets = ["train", "test"]
+    for subdataset in  tqdm(subdatasets, desc="Compressing subdatasets"):
+        for value in values:
             # Subdataset
             subdataset_path = os.path.join(path, subdataset)
             if not os.path.isdir(subdataset_path):
@@ -46,12 +49,13 @@ def scale_video(origin, destination, value):
     ]
     result = subprocess.run(ffprobe_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     if result.returncode != 0:
+        print(f"FFprobe error:\n{result.stderr}")
         raise RuntimeError(f"Extraction of dimensions failed for {origin}.")
     width, height = map(int, result.stdout.strip().split(','))
 
     # Calculate new dimensions
-    new_width = int(width * value)
-    new_height = int(height * value)
+    new_width = int(width * value) // 2 * 2 # Round down to the nearest even number
+    new_height = int(height * value) // 2 * 2
 
     # Resize video
     ffmpeg_command = [
@@ -64,11 +68,13 @@ def scale_video(origin, destination, value):
     ]
     result = subprocess.run(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if result.returncode != 0:
+        print(f"FFprobe error:\n{result.stderr}")
         raise RuntimeError(f"Scaling failed for {origin}.")
 
 def scale(path: str, values: list):
-    for value in values:
-        for subdataset in os.listdir(path):
+    subdatasets = ["train", "test"]
+    for subdataset in  tqdm(subdatasets, desc="Scaling subdatasets"):
+        for value in values:
             # Subdataset
             subdataset_path = os.path.join(path, subdataset)
             if not os.path.isdir(subdataset_path):

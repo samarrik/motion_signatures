@@ -20,18 +20,18 @@ def validate_dataset(path):
     
     # Structure and files check
     ls_dir = os.listdir(path)
-    if ls_dir != ["test", "train"]:
+    if ["test", "train"] in ls_dir:
         raise ValueError(f"Dataset {path} has wrong structure")
 
     valid_extensions = ('.mp4', '.avi', '.mov', '.mkv', '.wmv', '.flv', '.webm', '.mpeg', '.mpg', '.3gp')
-    for obj in ls_dir:
-        obj_path = os.path.join(path, obj)
-        if not os.path.isdir(obj_path):
+    for dir in ["test", "train"]:
+        dir_path = os.path.join(path, dir)
+        if not os.path.isdir(dir_path):
             raise ValueError(f"Dataset {path} has wrong structure")
 
-        dir_path = obj_path
         for file in os.listdir(dir_path):
-            if file.is_file() and not file.suffix.lower() in valid_extensions:
+            file_path = os.path.join(dir_path, file)
+            if os.path.isfile(file_path) and not os.path.splitext(file)[-1].lower() in valid_extensions:
                 raise ValueError(f"Dataset {path} has wrong structure")
 
 if __name__ == "__main__":
@@ -45,20 +45,20 @@ if __name__ == "__main__":
 
     # Preprocess dataset
     dataset_path = config.get("dataset_path")
-    validate_dataset(path)
+    validate_dataset(dataset_path)
 
     compression = config.get("compression")
     if compression["required"]:    
-        compress(path, compression["values"])
+        compress(dataset_path, compression["values"])
 
     scaling = config.get("scaling")
     if scaling["required"]:    
-        scale(path, scaling["values"])
+        scale(dataset_path, scaling["values"])
 
     # Extract features
-    extract_features(config)
+    extract_features(dataset_path, config)
 
     # Postprocess features
-    compute_corrs(config)
+    # compute_corrs(dataset_path, config)
 
     ...
