@@ -1,7 +1,9 @@
 import argparse
 import os
+from utils.correlations_computation import compute_corrs
+from utils.video_manipulation import compress, scale
+from utils.feature_extraction import extract_features
 from yaml import safe_load
-
 
 def parse_arguments():
     # Create a parser and the required arguments
@@ -45,13 +47,18 @@ if __name__ == "__main__":
     dataset_path = config.get("dataset_path")
     validate_dataset(path)
 
-    compress(path, config)
-    resize(path, config)
+    compression = config.get("compression")
+    if compression["required"]:    
+        compress(path, compression["values"])
+
+    scaling = config.get("scaling")
+    if scaling["required"]:    
+        scale(path, scaling["values"])
 
     # Extract features
-    extract_features(path, config)
+    extract_features(config)
 
     # Postprocess features
-    compute_corrs(path, config)
+    compute_corrs(config)
 
     ...

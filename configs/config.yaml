@@ -1,0 +1,18 @@
+dataset_path: data/dataset
+
+compression:
+  required: False
+  values: # crf values
+    - 18
+    - 23
+    - 28
+    - 33
+    - 38
+
+scaling:
+  required: False
+  values: # scale factors. not including 1.0
+    - 1.0
+    - 0.75
+    - 0.5
+    - 0.25
