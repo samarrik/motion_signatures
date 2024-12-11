@@ -1,8 +1,8 @@
-dataset_path: data/example_dataset
+dataset_path: data/dataset_small
 
 # Pre-processing
 compression:
-  required: True
+  required: False
   values: # crf values
     - 25
     - 30
@@ -10,7 +10,7 @@ compression:
     - 50
 
 scaling:
-  required: True
+  required: False
   values: # scale factors. not including 1.0
     - 0.8
     - 0.6
@@ -21,7 +21,7 @@ scaling:
 extraction:
   required: True
   to_extract_dir: train
-  extracted_path: data/extracted
+  extracted_path: data/extracted_small
   extractors:
     py-feat:
       - Pitch
@@ -49,3 +49,22 @@ extraction:
       - AU43
 
 # Correlations
+correlations:
+  required: False
+  correlations_path: data/correlations_small
+  clip_configs:
+    0:
+      length: 20
+      overlap: 10
+    # 1:
+    #   length: 15
+    #   overlap: 10
+    # 2:
+    #   length: 10
+    #   overlap: 5
+    # 3:
+    #   length: 5
+    #   overlap: 2.5
+    # 4:
+    #   length: 3
+    #   overlap: 1.5

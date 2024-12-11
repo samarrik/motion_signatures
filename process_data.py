@@ -18,21 +18,20 @@ def validate_dataset(path):
     if not os.path.isdir(path):
         raise ValueError(f"Dataset {path} is not a directory")
     
-    # Structure and files check
+    # Structure check
     ls_dir = os.listdir(path)
-    if ["test", "train"] in ls_dir:
-        raise ValueError(f"Dataset {path} has wrong structure")
+    if not all(subdir in ls_dir for subdir in ["test", "train"]):
+        raise ValueError(f"Dataset {path} has wrong structure, an issue with subdatasets")
 
+    # Files check
     valid_extensions = ('.mp4', '.avi', '.mov', '.mkv', '.wmv', '.flv', '.webm', '.mpeg', '.mpg', '.3gp')
     for dir in ["test", "train"]:
         dir_path = os.path.join(path, dir)
-        if not os.path.isdir(dir_path):
-            raise ValueError(f"Dataset {path} has wrong structure")
 
         for file in os.listdir(dir_path):
             file_path = os.path.join(dir_path, file)
             if os.path.isfile(file_path) and not os.path.splitext(file)[-1].lower() in valid_extensions:
-                raise ValueError(f"Dataset {path} has wrong structure")
+                raise ValueError(f"Dataset {path} has wrong structure, file {file} is not a file or has a wrong extension.")
 
 if __name__ == "__main__":
     # Parse arguments
@@ -69,7 +68,11 @@ if __name__ == "__main__":
         extract_features(subdataset_path, extracted_subdataset_path, extractors)
 
     # Postprocess features
-    # correlations_path = config.get("correlations_path")
-    # compute_corrs(extracted_path, correlations_path, config)
+    correlations = config.get("correlations")
+    if correlations["required"]:
+        extracted_path = extraction["extracted_path"]
+        correlations_path = correlations["correlations_path"]
+        extractors = config.get("extraction")["extractors"]
+        clip_configs = correlations["clip_configs"]
 
-    ...
+        compute_corrs(extracted_path, correlations_path, extractors, clip_configs)
