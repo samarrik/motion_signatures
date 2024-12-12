@@ -22,14 +22,14 @@ def extract_features(input_path, output_path, extractors):
 
         detector = extractors_objects.get("py-feat")
 
-        # # Perform feature extraction (server)
-        video_tensor = video_to_tensor(file)
-        detector.detect(
-            video_tensor,
+        # Perform feature extraction (server)
+        tensor = video_to_tensor(file)
+        detection = detector.detect(
+            tensor,
             data_type="tensor",
             face_detection_threshold=0,
-            # num_workers=10,
-            batch_size=5,
-            save=features_path,
+            num_workers=10,
+            batch_size=500,
             progress_bar=True,
         )
+        detection.to_csv(features_path)
