@@ -3,7 +3,7 @@ import pandas as pd
 from tqdm import tqdm
 
 # Constants
-CONSTANT_VIDEO_SIZE_S = 20
+CONSTANT_VIDEO_SIZE_S = 30
 
 def compute_corrs(input_path, output_path, extractors, clip_configs):
     # Determine the selected features from the configured extractors
@@ -48,7 +48,7 @@ def compute_corrs(input_path, output_path, extractors, clip_configs):
                     current_start_frame += frame_int_clip
 
                 # Process clips
-                for clip_start in clip_starts:
+                for id_clip, clip_start in enumerate(clip_starts):
                     clip_end = clip_start + frame_cnt_clip
                     if clip_end > frame_cnt_video:
                         break
@@ -75,15 +75,14 @@ def compute_corrs(input_path, output_path, extractors, clip_configs):
                     # Check the percentage of NaNs in each column
                     for col in df_clip.columns:
                         nan_ratio = df_clip[col].isna().mean()
-                        # If more than 40% are NaNs, make all NaN values 0, otherwise fill with mean
-                        if nan_ratio > 0.4:
+                        # If more than 30% are NaNs, make all NaN values 0, otherwise fill with mean
+                        if nan_ratio > 0.3:
                             df_clip[col] = df_clip[col].fillna(0)
                         else:
                             df_clip[col] = df_clip[col].fillna(df_clip[col].mean())
                     # No NANs after this
                     
                     # Compute the correlation matrix
-                    df_clip.to_csv("aga.csv")
                     corr_matrix = df_clip.corr()
 
                     # Flatten correlation matrix into unique pairs
@@ -95,7 +94,7 @@ def compute_corrs(input_path, output_path, extractors, clip_configs):
                     }
 
                     # Add to correlations DataFrame
-                    clip_label = f"{video_basename}_c{clip_start:05d}"
+                    clip_label = f"{video_basename}_c{id_clip:05d}"
                     correlations = pd.concat([correlations, pd.DataFrame(corr_pairs, index=[clip_label])])
 
             # Save the computed correlations for this clip configuration

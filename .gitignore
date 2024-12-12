@@ -1,6 +1,7 @@
 #### This is a HAND-CRAFTED part of this gitignore file ####
 # Do not stage data beacuse of its volume
 data
+data_old
 
 #### This is a GENERATED part of this gitignore file for projects including Jupyter, Python, and Linux ####
 

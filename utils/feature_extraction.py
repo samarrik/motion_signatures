@@ -27,9 +27,9 @@ def extract_features(input_path, output_path, extractors):
         detector.detect(
             video_tensor,
             data_type="tensor",
-            face_detection_threshold=0.85,
-            num_workers=10,
-            batch_size=500,
+            face_detection_threshold=0,
+            # num_workers=10,
+            batch_size=5,
             save=features_path,
             progress_bar=True,
         )
