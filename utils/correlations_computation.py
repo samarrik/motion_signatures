@@ -12,6 +12,7 @@ def compute_corrs(input_path, output_path, extractors, clip_configs):
         selected_features.extend(features)
 
     subdatasets = os.listdir(input_path)
+    subdatasets = [d for d in subdatasets if os.path.isdir(os.path.join(path, d))]
     for subdataset in tqdm(subdatasets, desc="Computing Correlations for subdatasets"):
         # List all CSV files
         extracted_features_files = []

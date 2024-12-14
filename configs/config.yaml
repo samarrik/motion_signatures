@@ -2,7 +2,7 @@ dataset_path: data/dataset
 
 # Pre-processing
 compression:
-  required: True
+  required: False
   values: # crf values
     - 25
     - 30
@@ -20,7 +20,7 @@ scaling:
 # Extraction
 extraction:
   required: False
-  to_extract_dir: train
+  to_extract_subdir: train
   extracted_path: data/extracted
   extractors:
     py-feat:
@@ -52,6 +52,7 @@ extraction:
 correlations:
   required: False
   correlations_path: data/correlations
+  extracted_path: data/extracted
   clip_configs:
     0:
       length: 30

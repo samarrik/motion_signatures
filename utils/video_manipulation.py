@@ -18,13 +18,12 @@ def compress_video(origin, destination, value):
 
 
 def compress(path: str, values: list):
-    subdatasets = ["train", "test"]
+    subdatasets = os.listdir(path)
+    subdatasets = [d for d in subdatasets if os.path.isdir(os.path.join(path, d))]
     for subdataset in  tqdm(subdatasets, desc="Compressing subdatasets"):
         for value in values:
             # Subdataset
             subdataset_path = os.path.join(path, subdataset)
-            if not os.path.isdir(subdataset_path):
-                continue
 
             # Compressed version of a subdataset
             compressed_subdataset = f"{subdataset}_c{value}"
@@ -72,13 +71,12 @@ def scale_video(origin, destination, value):
         raise RuntimeError(f"Scaling failed for {origin}.")
 
 def scale(path: str, values: list):
-    subdatasets = ["train", "test"]
+    subdatasets = os.listdir(path)
+    subdatasets = [d for d in subdatasets if os.path.isdir(os.path.join(path, d))]
     for subdataset in  tqdm(subdatasets, desc="Scaling subdatasets"):
         for value in values:
             # Subdataset
             subdataset_path = os.path.join(path, subdataset)
-            if not os.path.isdir(subdataset_path):
-                continue
 
             # Scaled version of a subdataset
             scaled_subdataset = f"{subdataset}_s{value}"
