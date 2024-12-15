@@ -5,9 +5,8 @@ compression:
   required: False
   values: # crf values
     - 25
-    - 30
-    - 40
-    - 50
+    - 35
+    - 45
 
 scaling:
   required: False
